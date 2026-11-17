@@ -1,0 +1,70 @@
+# EXAMPLE master resume (fictional person). setup-profile copies this format into your data folder.
+page_size: letter     # A4 or letter
+max_pages: 2
+person:
+  name: Alex Rivera
+  email: alex@example.com
+  phone: "+1 555 010 0000"
+  linkedin: https://linkedin.com/in/example
+  location: Austin, USA
+
+summary_default: >-
+  Product manager with <b>8 years</b> building B2B SaaS, most recently leading AI features from 0→1.
+
+experience:
+  - company: Example Corp
+    start: 2021-03
+    end: present
+    roles:
+      - id: ex_senior
+        title: Senior Product Manager, AI Assistant
+        start: 2023-01
+        end: present
+        product_type: B2B
+        sections:
+          - bullets:
+              - id: ex_scope          # first bullet = scope bullet, always shown first
+                text: "Own the AI assistant used by 2,000 business customers, from strategy to launch."
+              - id: ex_eval
+                text: "Built an evaluation suite that cut bad answers by <b>40%</b> before each release."
+      - id: ex_pm
+        title: Product Manager
+        start: 2021-03
+        end: 2022-12
+        sections:
+          - heading: Billing (0→1)     # sub-products get their own heading and stay separate
+            bullets:
+              - id: ex_billing
+                text: "Launched usage-based billing, growing expansion revenue <b>18%</b>."
+  - company: Startup Inc
+    acquired_by: BigCo
+    description: Seed-stage analytics startup
+    start: 2018-06
+    end: 2021-02
+    roles:
+      - id: st_pm
+        title: Product Manager
+        start: 2018-06
+        end: 2021-02
+        sections:
+          - bullets:
+              - id: st_scope
+                text: "First PM; took the product from 10 to 300 paying customers."
+
+education:
+  - school: Example University
+    degree: BSc, Computer Science
+    years: 2014 – 2018
+
+strengths_library:
+  - AI evaluation & quality
+  - 0→1 product development
+  - Usage-based pricing
+  - B2B SaaS growth
+
+# Facts the candidate confirmed during gap analysis. Additions in tailoring files must cite these ids.
+confirmed_additions:
+  - id: ab_tests
+    fact: Ran weekly A/B tests on assistant prompts and onboarding flows at Example Corp.
+    confirmed: 2026-11-01
+    question: "The JD asks for experimentation. Have you run A/B tests? On what?"
