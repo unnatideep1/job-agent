@@ -1,0 +1,8 @@
+# Personal data never goes to GitHub.
+# Your data folder should live OUTSIDE this repo; these lines are a safety net.
+job-agent-data/
+profile/
+*.pdf
+*.docx
+__pycache__/
+.DS_Store
