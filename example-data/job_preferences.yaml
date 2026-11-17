@@ -1,0 +1,45 @@
+# EXAMPLE job preferences (fictional candidate). Replace everything with your own.
+
+function: product management
+departments: [product]          # ATS department names to keep; empty = keep all
+
+target_levels:
+  include_titles: [group product manager, principal product manager, staff product manager, director of product, director of product management, "director, product", head of product, product lead, vp product, "vp, product", vice president of product]
+  exclude_titles: [associate, intern, apm, marketing, designer, engineer, engineering, support, operations]
+  vp_only_if_stage: [seed, series_a, series_b]
+
+company_stage:
+  preferred: [series_c_plus, late_stage, big_tech_ai_team]
+  acceptable: [series_b]
+
+domain:
+  preferred: [ai, generative ai, agents, llm]
+  ai_required: false
+
+locations:
+  onsite_or_hybrid: [austin]
+  remote_from: [united states, us, usa, north america, anywhere, global]
+  relocation: false
+
+posting:
+  max_age_days: 45
+  verify_live: true
+
+volume:
+  max_tailored_per_week: 5
+  shortlist_size: 10
+
+# Company job boards to scan: the board id from each ATS URL, e.g.
+#   job-boards.greenhouse.io/<id>   jobs.lever.co/<id>   jobs.ashbyhq.com/<id>   ats.rippling.com/<id>
+sources:
+  greenhouse: [stripe, databricks, gitlab, twilio]
+  lever: [spotify]
+  ashby: [notion, openai, supabase]
+  rippling: [rippling]
+  # Companies without a public JSON board: the Scout searches these careers sites in the browser.
+  careers_sites:
+    - https://apply.careers.microsoft.com/careers?lc=Austin%2C%20Texas%2C%20United%20States
+    - https://www.google.com/about/careers/applications/jobs/results/?location=Austin%20TX%20USA
+
+never:
+  - Automate LinkedIn (scraping, Easy Apply). Its terms ban bots and accounts get suspended.
