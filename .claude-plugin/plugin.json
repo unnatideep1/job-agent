@@ -1,0 +1,10 @@
+{
+  "name": "job-agent",
+  "version": "0.1.0",
+  "description": "Scout high-fit roles, tailor your resume truthfully to each posting, get an independent review, and apply with your approval at every step.",
+  "author": {
+    "name": "Unnati Deep"
+  },
+  "license": "MIT",
+  "keywords": ["job search", "resume", "tailoring", "applications", "agents"]
+}
