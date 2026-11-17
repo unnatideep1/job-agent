@@ -1,0 +1,34 @@
+# Example tailoring file. One per application, written by the Writer, checked by Tod.
+target:
+  company: Example Target
+  role: Group Product Manager, AI
+  url: https://example.com/jobs/123
+output_name: Alex_Rivera_Resume_ExampleTarget_GPM
+
+summary: >-
+  Product manager with <b>8 years</b> in B2B SaaS, leading AI products from 0→1 and holding them to measurable quality bars.
+
+strengths_title: Core Strengths
+strengths: [AI evaluation & quality, 0→1 product development, B2B SaaS growth]   # only from strengths_library
+
+# Bullet order per role: a list per section. The scope (first) bullet is always kept first.
+order:
+  ex_senior: [[ex_scope, ex_eval]]
+
+# Reword existing bullets in the JD's language. Every number must survive unchanged.
+rewrites:
+  ex_eval:
+    text: "Built an AI evaluation suite that cut bad answers by <b>40%</b> before each release."
+    why: "JD asks for 'AI quality and evaluation'; same fact, JD's wording"
+
+# New bullets from facts the candidate confirmed (confirmed_additions ids in the master file).
+# Numbers in the text must appear in that confirmed fact.
+additions:
+  ex_senior:
+    - from: ab_tests
+      section: 0
+      after: ex_eval
+      text: "Ran weekly A/B tests on assistant prompts and onboarding flows."
+
+omit: []          # bullet ids to leave out (never a scope bullet), e.g. to fit 2 pages
+date_style: inline   # default. 'right' right-aligns dates; the builder falls back to inline if parsers would misread it
