@@ -85,6 +85,17 @@ def normalise(source, slug, data):
     return out
 
 
+def rippling_created(slug, url):
+    """Rippling's list endpoint has no posting date; fetch it for matched roles only."""
+    uuid = url.rstrip("/").rsplit("/", 1)[-1]
+    if not re.fullmatch(r"[0-9a-fA-F-]{36}", uuid):
+        return ""
+    try:
+        return iso_date(fetch_json(ENDPOINTS["rippling"].format(slug=slug) + "/" + uuid).get("createdOn"))
+    except Exception:
+        return ""
+
+
 def has_phrase(text, phrase):
     """Whole-word phrase match ('us' must not match 'Belarus'; 'engineer' must not match 'Engineering')."""
     return re.search(r"(?<![a-z0-9])" + re.escape(phrase.lower()) + r"(?![a-z0-9])", text.lower()) is not None
@@ -141,11 +152,14 @@ def scan(prefs):
     max_age = (prefs.get("posting") or {}).get("max_age_days", 45)
     keep = []
     for j in jobs:
-        depts = [d.lower() for d in (prefs.get("departments") or [])]
-        if j.get("department") and depts and j["department"].lower() not in depts:
+        depts = prefs.get("departments") or []
+        # whole-word match, so "product" keeps "Product & Design" and "Product Management"
+        if j.get("department") and depts and not any(has_phrase(j["department"], d) for d in depts):
             continue
         if not (title_ok(j["title"], prefs) and location_ok(j, prefs)):
             continue
+        if j["source"] == "rippling" and not j["posted"]:
+            j["posted"] = rippling_created(j["company"], j["url"])  # list API has no date; detail API does
         a = age_days(j["posted"]) if j["posted"] else None
         j["age_days"] = "" if a is None else a
         j["flag"] = "stale?" if (a is not None and a > max_age) else ""
