@@ -1,0 +1,13 @@
+{
+  "name": "job-agent",
+  "owner": {
+    "name": "Unnati Deep"
+  },
+  "plugins": [
+    {
+      "name": "job-agent",
+      "source": "./",
+      "description": "Scout high-fit roles, tailor your resume truthfully to each posting, get an independent review, and apply with your approval at every step."
+    }
+  ]
+}
