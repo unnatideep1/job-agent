@@ -60,3 +60,5 @@ Also flag risks a screening tool will compute, such as years in the function bel
 - Default summary shape: who → what was built (all items named briefly) → earlier career line → results, framed around what the JD values (e.g. analytics).
 - Sell analytical work as analytical: evaluation, benchmarking, ML research direction, dashboards.
 - Attribute every number to the exact product or role it came from.
+- Never surface a likely deal-breaker in the summary (e.g. total years when the JD asks for more); let the experience section speak.
+- Don't cite results from only one role in the summary; either spread them across roles or leave them to the bullets.
