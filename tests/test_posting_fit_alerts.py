@@ -1,3 +1,4 @@
+import json
 import unittest
 from unittest import mock
 
@@ -61,6 +62,21 @@ class Posting(unittest.TestCase):
     def test_unsafe_or_unknown_urls(self):
         self.assertIsNone(pc.from_api("https://jobs.lever.co/..%2f/abc"))
         self.assertIsNone(pc.from_api("https://example.com/careers/1"))
+
+    def test_jobposting_json_ld(self):
+        ld = {"@context": "https://schema.org", "@type": "JobPosting", "title": "Product Manager, AI",
+              "description": "Build AI products.", "datePosted": "2026-10-28T18:07:42-07:00",
+              "responsibilities": "Own the roadmap&nbsp;Lead GTM",
+              "qualifications": "8+ years of Product Management experience&nbsp;Shipped AI",
+              "hiringOrganization": {"@type": "Organization", "name": "Acme"},
+              "jobLocation": [{"@type": "Place", "name": "Bangalore, India"}]}
+        page = f'<html><head><script type="application/ld+json">{json.dumps(ld)}</script></head><body></body></html>'
+        r = pc.job_posting_ld(page)
+        self.assertEqual((r["title"], r["company"], r["location"], r["posted"]),
+                         ("Product Manager, AI", "Acme", "Bangalore, India", "2026-10-28"))
+        self.assertIn("- Own the roadmap\n- Lead GTM", r["text"])
+        self.assertEqual([y["years"] for y in pc.years_required(r["text"])], [8])
+        self.assertIsNone(pc.job_posting_ld("<html><script type='application/ld+json'>{bad json</script></html>"))
 
 
 class Fit(unittest.TestCase):
