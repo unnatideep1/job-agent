@@ -1,0 +1,52 @@
+# Example fit assessment, written by the Scout from the JD (the Writer may refine it). fit_score.py turns it into
+# a 1-5 score: 4.0+ Apply, 3.0-3.9 Consider, below 3.0 Skip. A blocker forces Skip; the candidate can override.
+role:
+  company: Example Target
+  title: Group Product Manager, AI
+  url: https://example.com/jobs/123
+
+# One item per JD requirement.
+#   weight: must | core | nice        how much the JD leans on it
+#   basis:  stated | structural | inferred   stated = the JD says so; inferred (market knowledge) can never be 'must'
+#   match:  proven | partly | missing  against the master file; proven/partly must cite master ids as evidence
+requirements:
+  - req: Shipped AI / LLM products with measurable quality bars
+    weight: must
+    basis: stated
+    match: proven
+    evidence: [ex_eval, ex_scope]
+  - req: 7+ years of product management
+    weight: must
+    basis: stated
+    match: proven
+    evidence: [ex_senior, ex_pm, st_pm]
+  - req: Experimentation and A/B testing
+    weight: core
+    basis: stated
+    match: proven
+    evidence: [ab_tests]
+  - req: Agent platforms or tool-calling products
+    weight: core
+    basis: stated
+    match: partly
+    evidence: [ex_scope]
+    note: "assistant, not a multi-step agent platform; the Writer maps by intent, then proposes a bullet"
+  - req: Managed other PMs
+    weight: core
+    basis: inferred
+    match: missing
+    note: "GPM roles usually manage PMs; the JD doesn't say so"
+  - req: Pricing and packaging
+    weight: nice
+    basis: stated
+    match: proven
+    evidence: [ex_billing]
+
+role_fit: 4          # 1-5: level, function and scope match
+preferences_fit: 5   # 1-5: location, stage, domain against job_preferences.yaml
+min_years: 7         # the JD's stated minimum, if any
+blockers: []         # e.g. "requires US citizenship"; any blocker forces Skip
+screener_risks:
+  - "Title is Senior PM, target is Group PM: lead with scope (2,000 customers) and cross-team work"
+# override: {decision: apply, reason: "referral from the hiring manager"}   # the candidate's call, always respected
+# posting_check: posting_check.json   # posting_check.py output; this is the default

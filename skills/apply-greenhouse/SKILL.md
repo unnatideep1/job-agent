@@ -37,6 +37,17 @@ Only after the candidate says yes in chat:
 1. Check that the latest PDF is attached.
 2. Click **Submit application**.
 3. Confirm the confirmation page has loaded.
-4. Add the application to `DATA/applications.csv`.
+4. Update the tracker (it keys on the posting URL, so this updates the row the orchestrator created):
+   ```
+   python "${CLAUDE_PLUGIN_ROOT}/skills/job-hunt/scripts/tracker.py" upsert --data DATA --url <posting url> \
+     --set status=applied --set date_applied=<yyyy-mm-dd> --set resume_file=<pdf filename> \
+     --set next_step="Follow up if no reply" --set next_step_date=<date + 7 days>
+   ```
+
+If the candidate wants to pause before submitting, don't submit. Keep `APP/form_snapshot.txt` current and set:
+```
+python "${CLAUDE_PLUGIN_ROOT}/skills/job-hunt/scripts/tracker.py" upsert --data DATA --url <posting url> \
+  --set status=draft --set next_step="Finish and submit" --set next_step_date=<yyyy-mm-dd>
+```
 
 Other ATSs (Lever, Ashby, Workday) need their own skill. Follow the same structure.

@@ -17,6 +17,9 @@ order:
 
 # Reword existing bullets in the JD's language. Every number must survive unchanged.
 rewrites:
+  ex_scope:
+    text: "Own the AI assistant used by 2,000 business customers on an enterprise B2B plan, from strategy to launch."
+    why: "JD says 'enterprise customers'; mapped by intent (see keywords), number unchanged"
   ex_eval:
     text: "Built an AI evaluation suite that cut bad answers by <b>40%</b> before each release."
     why: "JD asks for 'AI quality and evaluation'; same fact, JD's wording"
@@ -32,3 +35,27 @@ additions:
 
 omit: []          # bullet ids to leave out (never a scope bullet), e.g. to fit 2 pages
 date_style: inline   # default. 'right' right-aligns dates; the builder falls back to inline if parsers would misread it
+
+# JD keywords, mapped by intent to the master file. The builder refuses a keyword in a rewrite, addition or summary
+# unless its source says it, or this list maps that source to it (evidence + stretch). ats_check.py reports coverage.
+keywords:
+  - term: AI evaluation
+    priority: must
+    aliases: [evals, model evaluation]
+    evidence: [ex_eval]
+    stretch: "the evaluation suite tests the AI assistant's answers (role: Senior PM, AI Assistant)"
+  - term: experimentation
+    priority: core
+    aliases: [A/B tests, A/B testing]
+    evidence: [ab_tests]
+  - term: enterprise customers
+    priority: core
+    aliases: [enterprise B2B, enterprise]
+    evidence: [ex_scope]
+    stretch: "the 2,000 customers are businesses buying a B2B product; Tod: check the plan really is sold to enterprises"
+  - term: pricing
+    priority: nice
+    aliases: [monetization, usage-based billing]
+    evidence: [ex_billing]
+  - term: agent platforms
+    priority: core                # nothing in the master backs this: the Writer drafts a proposal (see proposals.yaml)

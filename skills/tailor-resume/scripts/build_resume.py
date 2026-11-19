@@ -182,11 +182,95 @@ def plain(t):
     return " ".join(re.sub(r"<[^>]+>", "", str(t)).split())
 
 
-NUM_RE = re.compile(r"\d[\d,.]*\s*%?|\+\d+%?")
+NUM_RE = re.compile(r"(?<![A-Za-z])\d[\d,.]*\s*%?|\+\d+%?")  # digits inside words (B2B, S3) aren't metrics
 
 
 def numbers(t):
     return sorted(n.replace(" ", "").rstrip(".,") for n in NUM_RE.findall(plain(t)))
+
+
+# ------------------------------------------------------------------ keywords
+def norm(t):
+    """Lower-case words with punctuation as spaces, padded, so phrases match on word boundaries."""
+    return " " + " ".join(re.sub(r"[^a-z0-9+#/&]+", " ", plain(t).lower().replace("→", " to ")).split()) + " "
+
+
+def _variants(phrase):
+    p = norm(phrase).strip()
+    if not p:
+        return []
+    out = {p, p + "s", p + "es"}
+    if p.endswith("s"):
+        out.add(p[:-1])
+    if p.endswith("es"):
+        out.add(p[:-2])
+    return [f" {v} " for v in out]
+
+
+def mentions(text, kw):
+    """True if text uses the keyword's term or one of its aliases (whole words, singular or plural)."""
+    t = norm(text)
+    return any(v in t for ph in [kw.get("term", "")] + list(kw.get("aliases") or []) for v in _variants(str(ph)))
+
+
+def master_texts(master):
+    """id -> text for every bullet and confirmed addition, plus role titles and the default summary."""
+    out = {}
+    for co in master.get("experience") or []:
+        for r in co.get("roles") or []:
+            out[r["id"]] = f"{r.get('title', '')}. {r.get('description', '')}"
+            for s in r.get("sections") or []:
+                for b in s.get("bullets") or []:
+                    out[b["id"]] = f"{s.get('heading', '')} {b['text']}"
+    for a in master.get("confirmed_additions") or []:
+        if a.get("id") and a.get("status", "confirmed") in CONFIRMED:
+            out[a["id"]] = str(a.get("fact", ""))
+    out["_summary_default"] = str(master.get("summary_default", ""))
+    out["_strengths_library"] = " · ".join(master.get("strengths_library") or [])
+    return out
+
+
+def supports(kw, text, ids):
+    """A placement is backed if its source says it (term or alias) or the Writer mapped this source to it by intent."""
+    return mentions(text, kw) or bool(set(kw.get("evidence") or []) & set(ids) and kw.get("stretch"))
+
+
+def validate_keywords(master, t):
+    """Every JD keyword the resume uses must be backed by the source it sits in (decision: no unsupported keywords)."""
+    errs, warns = [], []
+    kws = t.get("keywords") or []
+    if not isinstance(kws, list):
+        return ["keywords: expected a list of {term, priority, aliases, evidence, stretch}"], warns
+    texts = master_texts(master)
+    bullets = {b["id"]: b["text"] for co in master.get("experience") or [] for r in co.get("roles") or []
+               for s in r.get("sections") or [] for b in s.get("bullets") or []}
+    adds = {a["id"]: a for a in master.get("confirmed_additions") or [] if a.get("id")}
+    for kw in kws:
+        if not isinstance(kw, dict) or not kw.get("term"):
+            errs.append("keywords: every item needs a 'term'"); continue
+        name = kw["term"]
+        if kw.get("priority", "core") not in ("must", "core", "nice"):
+            errs.append(f"keywords.{name}: priority must be must, core or nice")
+        ev = kw.get("evidence") or []
+        bad = [e for e in ev if e not in texts]
+        if bad:
+            errs.append(f"keywords.{name}: evidence ids not in the master file: {bad}")
+        if ev and not kw.get("stretch") and not all(mentions(texts.get(e, ""), kw) for e in ev if e in texts):
+            errs.append(f"keywords.{name}: evidence doesn't use the term; add 'stretch' saying why it's a fair reading")
+        for bid, rw in (t.get("rewrites") or {}).items():
+            if isinstance(rw, dict) and bid in bullets and mentions(rw.get("text", ""), kw) \
+                    and not supports(kw, bullets[bid], [bid]):
+                errs.append(f"rewrites.{bid}: uses '{name}', which bullet {bid} doesn't back. Map it by intent "
+                            f"(keywords.{name}.evidence + stretch), place it where it's true, or propose a bullet for approval")
+        for rid, items in (t.get("additions") or {}).items():
+            for it in items or []:
+                src = adds.get((it or {}).get("from")) if isinstance(it, dict) else None
+                if src and mentions(it.get("text", ""), kw) and not supports(kw, src.get("fact", ""), [src["id"]]):
+                    errs.append(f"additions.{rid}: uses '{name}', which confirmed fact '{src['id']}' doesn't back")
+        summary = t.get("summary")
+        if summary and mentions(summary, kw) and not supports(kw, " ".join(texts.values()), list(texts)):
+            errs.append(f"summary: uses '{name}', which nothing in the master file backs")
+    return errs, warns
 
 
 # ------------------------------------------------------------------ validation
@@ -232,6 +316,9 @@ def validate_master(master):
         if not a.get("id") or not a.get("fact"):
             errs.append("every confirmed_additions entry needs 'id' and 'fact'")
     return errs
+
+
+CONFIRMED = ("confirmed", "candidate-confirmed")
 
 
 def validate_tailoring(master, t):
@@ -281,7 +368,11 @@ def validate_tailoring(master, t):
                 errs.append(f"additions.{rid}: each item must be {{from, text, section, after}}"); continue
             src = adds.get(it.get("from"))
             if not src:
-                errs.append(f"additions.{rid}: 'from: {it.get('from')}' is not a confirmed_additions id")
+                errs.append(f"additions.{rid}: 'from: {it.get('from')}' is not a confirmed_additions id "
+                            "(drafts in proposals.yaml can't be used until the candidate approves them)")
+            elif src.get("status", "confirmed") not in CONFIRMED:
+                errs.append(f"additions.{rid}: confirmed_additions '{src['id']}' has status "
+                            f"'{src.get('status')}'; only candidate-approved facts can go on a resume")
             if not it.get("text"):
                 errs.append(f"additions.{rid}: missing text")
             elif src:
@@ -308,7 +399,8 @@ def validate_tailoring(master, t):
                         "the orchestrator adds it to the master file after they say yes.")
     if t.get("date_style") not in (None, "right", "inline"):
         errs.append("date_style must be 'right' or 'inline'")
-    return errs, warns
+    e2, w2 = validate_keywords(master, t)
+    return errs + e2, warns + w2
 
 
 def ordered(section, wanted, omit, extra):

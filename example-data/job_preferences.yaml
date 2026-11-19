@@ -1,7 +1,13 @@
 # EXAMPLE job preferences (fictional candidate). Replace everything with your own.
 
 function: product management
+function_titles: [product manager, product management, head of product, product lead, vp product]   # titles that count toward years in the function
 departments: [product]          # ATS department names to keep; empty = keep all
+
+# Screening questions a posting can rule you out on. The posting check quotes the JD line and blocks a conflict.
+work_authorization:
+  needs_sponsorship: false              # true if you need a visa sponsored now or in future
+  meets_citizenship_or_clearance: null  # true / false / null (unknown: flagged for you to check)
 
 target_levels:
   include_titles: [group product manager, principal product manager, staff product manager, director of product, director of product management, "director, product", head of product, product lead, vp product, "vp, product", vice president of product]
@@ -29,8 +35,17 @@ volume:
   max_tailored_per_week: 5
   shortlist_size: 10
 
-# Company job boards to scan: the board id from each ATS URL, e.g.
+# Companies from the bundled catalog (skills/scout-jobs/portals.yaml, 260+ boards), picked by tag or name.
+# Tags: agtech, ai, consumer, data, defense, design, devtools, edtech, fintech, gaming, hardware, health, infra,
+#       logistics, media, robotics, saas, security
+catalog:
+  tags: [ai, devtools]
+  companies: [Ramp, Figma]   # by catalog name, regardless of tag
+  exclude: [Example Corp]    # never scan these
+
+# Extra company job boards: the board id from each ATS URL, e.g.
 #   job-boards.greenhouse.io/<id>   jobs.lever.co/<id>   jobs.ashbyhq.com/<id>   ats.rippling.com/<id>
+#   apply.workable.com/<id>   jobs.smartrecruiters.com/<id>   <id>.recruitee.com
 sources:
   greenhouse: [stripe, databricks, gitlab, twilio]
   lever: [spotify]

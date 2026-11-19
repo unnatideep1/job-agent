@@ -1,0 +1,276 @@
+# Company job boards the Scout can scan, adapted from the portal-catalog idea in career-ops
+# (https://github.com/career-ops-hq/career-ops, MIT). Every board below answered its public JSON API
+# with at least one open job on 2026-11-19. Boards move: scout.py reports any that fail, and
+# you can add your own under `sources:` in job_preferences.yaml.
+#
+# Pick companies by tag in job_preferences.yaml, e.g.  catalog: {tags: [ai, fintech]}
+# Tags: agtech, ai, consumer, data, defense, design, devtools, edtech, fintech, gaming, hardware, health, infra, logistics, media, robotics, saas, security
+companies:
+  - {name: 1Password, source: ashby, id: 1password, tags: [security]}
+  - {name: Abridge, source: ashby, id: abridge, tags: [ai, health]}
+  - {name: Airbyte, source: ashby, id: airbyte, tags: [data]}
+  - {name: Airwallex, source: ashby, id: airwallex, tags: [fintech]}
+  - {name: Attio, source: ashby, id: attio, tags: [saas]}
+  - {name: Baseten, source: ashby, id: baseten, tags: [ai, infra]}
+  - {name: Benchling, source: ashby, id: benchling, tags: [health]}
+  - {name: Black Forest Labs, source: ashby, id: black-forest-labs, tags: [ai]}
+  - {name: Braintrust, source: ashby, id: braintrust, tags: [ai, devtools]}
+  - {name: Cartesia, source: ashby, id: cartesia, tags: [ai]}
+  - {name: Character AI, source: ashby, id: character, tags: [ai]}
+  - {name: Clay, source: ashby, id: claylabs, tags: [saas]}
+  - {name: Clerk, source: ashby, id: clerk, tags: [devtools]}
+  - {name: ClickHouse, source: ashby, id: clickhouse, tags: [data]}
+  - {name: ClickUp, source: ashby, id: clickup, tags: [saas]}
+  - {name: Cognition, source: ashby, id: cognition, tags: [ai]}
+  - {name: Cohere, source: ashby, id: cohere, tags: [ai]}
+  - {name: Commure, source: ashby, id: commure, tags: [health]}
+  - {name: Crusoe, source: ashby, id: crusoe, tags: [ai, infra]}
+  - {name: Cursor, source: ashby, id: cursor, tags: [ai, devtools]}
+  - {name: Decagon, source: ashby, id: decagon, tags: [ai]}
+  - {name: Deepgram, source: ashby, id: deepgram, tags: [ai]}
+  - {name: DeepL, source: ashby, id: DeepL, tags: [ai]}
+  - {name: Doctolib, source: ashby, id: doctolib, tags: [health]}
+  - {name: Drata, source: ashby, id: drata, tags: [security]}
+  - {name: E2B, source: ashby, id: e2b, tags: [ai, devtools]}
+  - {name: ElevenLabs, source: ashby, id: elevenlabs, tags: [ai]}
+  - {name: Elicit, source: ashby, id: elicit, tags: [ai]}
+  - {name: Exa, source: ashby, id: exa, tags: [ai]}
+  - {name: Factory, source: ashby, id: factory, tags: [ai, devtools]}
+  - {name: Gamma, source: ashby, id: gamma, tags: [ai, saas]}
+  - {name: GetYourGuide, source: ashby, id: GetYourGuide, tags: [consumer]}
+  - {name: Granola, source: ashby, id: granola, tags: [ai]}
+  - {name: HackerOne, source: ashby, id: hackerone, tags: [security]}
+  - {name: Harvey, source: ashby, id: harvey, tags: [ai]}
+  - {name: Hex, source: ashby, id: hex, tags: [data, ai]}
+  - {name: Ideogram, source: ashby, id: ideogram, tags: [ai]}
+  - {name: Inngest, source: ashby, id: inngest, tags: [devtools]}
+  - {name: Kalshi, source: ashby, id: kalshi, tags: [fintech]}
+  - {name: Lambda, source: ashby, id: lambda, tags: [ai, infra]}
+  - {name: LangChain, source: ashby, id: langchain, tags: [ai, devtools]}
+  - {name: Legora, source: ashby, id: legora, tags: [ai]}
+  - {name: Linear, source: ashby, id: linear, tags: [devtools, saas]}
+  - {name: LlamaIndex, source: ashby, id: llamaindex, tags: [ai]}
+  - {name: Lovable, source: ashby, id: lovable, tags: [ai]}
+  - {name: Lumos, source: ashby, id: lumos, tags: [security]}
+  - {name: Magic, source: ashby, id: magic, tags: [ai]}
+  - {name: Mercor, source: ashby, id: mercor, tags: [ai]}
+  - {name: Mintlify, source: ashby, id: mintlify, tags: [devtools]}
+  - {name: Miro, source: ashby, id: miro, tags: [saas]}
+  - {name: Mistral, source: ashby, id: mistral.ai, tags: [ai]}
+  - {name: Modal, source: ashby, id: modal, tags: [ai, infra]}
+  - {name: Mollie, source: ashby, id: mollie, tags: [fintech]}
+  - {name: MotherDuck, source: ashby, id: motherduck, tags: [data]}
+  - {name: Multiverse, source: ashby, id: multiverse, tags: [edtech]}
+  - {name: n8n, source: ashby, id: n8n, tags: [devtools]}
+  - {name: Neon, source: ashby, id: neon, tags: [devtools, data]}
+  - {name: Notable, source: ashby, id: notable, tags: [health]}
+  - {name: Notion, source: ashby, id: notion, tags: [saas]}
+  - {name: Nubank, source: ashby, id: nubank, tags: [fintech]}
+  - {name: OpenAI, source: ashby, id: openai, tags: [ai]}
+  - {name: OpenRouter, source: ashby, id: openrouter, tags: [ai]}
+  - {name: Parloa, source: ashby, id: parloa, tags: [ai]}
+  - {name: Perplexity, source: ashby, id: perplexity, tags: [ai]}
+  - {name: Persona, source: ashby, id: persona, tags: [security]}
+  - {name: Photoroom, source: ashby, id: photoroom, tags: [ai]}
+  - {name: Physical Intelligence, source: ashby, id: physicalintelligence, tags: [ai, robotics]}
+  - {name: Pika, source: ashby, id: pika, tags: [ai]}
+  - {name: Pinecone, source: ashby, id: pinecone, tags: [ai, data]}
+  - {name: Plaid, source: ashby, id: plaid, tags: [fintech]}
+  - {name: Pleo, source: ashby, id: pleo, tags: [fintech]}
+  - {name: Polymarket, source: ashby, id: polymarket, tags: [fintech]}
+  - {name: Poolside, source: ashby, id: poolside, tags: [ai]}
+  - {name: PostHog, source: ashby, id: posthog, tags: [devtools, data]}
+  - {name: Qonto, source: ashby, id: qonto, tags: [fintech]}
+  - {name: Railway, source: ashby, id: railway, tags: [devtools]}
+  - {name: Ramp, source: ashby, id: ramp, tags: [fintech]}
+  - {name: Reka, source: ashby, id: reka, tags: [ai]}
+  - {name: Render, source: ashby, id: render, tags: [devtools]}
+  - {name: Replit, source: ashby, id: replit, tags: [ai, devtools]}
+  - {name: Resend, source: ashby, id: resend, tags: [devtools]}
+  - {name: Rillet, source: ashby, id: rillet, tags: [fintech]}
+  - {name: Rula, source: ashby, id: rula, tags: [health]}
+  - {name: RunPod, source: ashby, id: runpod, tags: [ai, infra]}
+  - {name: Runway, source: ashby, id: runway-ml, tags: [ai]}
+  - {name: Semgrep, source: ashby, id: semgrep, tags: [security, devtools]}
+  - {name: Sierra, source: ashby, id: sierra, tags: [ai]}
+  - {name: Snyk, source: ashby, id: snyk, tags: [security]}
+  - {name: Socket, source: ashby, id: socket, tags: [security]}
+  - {name: Speak, source: ashby, id: speak, tags: [ai, edtech]}
+  - {name: Suno, source: ashby, id: suno, tags: [ai]}
+  - {name: Supabase, source: ashby, id: supabase, tags: [devtools]}
+  - {name: Synthesia, source: ashby, id: synthesia, tags: [ai]}
+  - {name: Temporal, source: ashby, id: temporal, tags: [devtools]}
+  - {name: Tennr, source: ashby, id: tennr, tags: [ai, health]}
+  - {name: Vanta, source: ashby, id: vanta, tags: [security]}
+  - {name: Vapi, source: ashby, id: vapi, tags: [ai]}
+  - {name: Warp, source: ashby, id: warp, tags: [devtools]}
+  - {name: Wayve, source: ashby, id: wayve, tags: [ai, robotics]}
+  - {name: Weaviate, source: ashby, id: weaviate, tags: [ai, data]}
+  - {name: WorkOS, source: ashby, id: workos, tags: [devtools]}
+  - {name: Writer, source: ashby, id: writer, tags: [ai]}
+  - {name: Zapier, source: ashby, id: zapier, tags: [saas]}
+  - {name: Abnormal Security, source: greenhouse, id: abnormalsecurity, tags: [security, ai]}
+  - {name: Adyen, source: greenhouse, id: adyen, tags: [fintech]}
+  - {name: Affirm, source: greenhouse, id: affirm, tags: [fintech]}
+  - {name: Airbnb, source: greenhouse, id: airbnb, tags: [consumer]}
+  - {name: Airtable, source: greenhouse, id: airtable, tags: [saas]}
+  - {name: Alloy, source: greenhouse, id: alloy, tags: [fintech]}
+  - {name: Anduril, source: greenhouse, id: andurilindustries, tags: [defense, ai]}
+  - {name: Anthropic, source: greenhouse, id: anthropic, tags: [ai]}
+  - {name: Arize AI, source: greenhouse, id: arizeai, tags: [ai]}
+  - {name: Asana, source: greenhouse, id: asana, tags: [saas]}
+  - {name: AssemblyAI, source: greenhouse, id: assemblyai, tags: [ai]}
+  - {name: Attentive, source: greenhouse, id: attentive, tags: [saas]}
+  - {name: Betterment, source: greenhouse, id: betterment, tags: [fintech]}
+  - {name: Block, source: greenhouse, id: block, tags: [fintech]}
+  - {name: Box, source: greenhouse, id: boxinc, tags: [saas]}
+  - {name: Braze, source: greenhouse, id: braze, tags: [saas]}
+  - {name: Brex, source: greenhouse, id: brex, tags: [fintech]}
+  - {name: Bugcrowd, source: greenhouse, id: bugcrowd, tags: [security]}
+  - {name: BuzzFeed, source: greenhouse, id: buzzfeed, tags: [media]}
+  - {name: C3 AI, source: greenhouse, id: c3iot, tags: [ai]}
+  - {name: Calendly, source: greenhouse, id: calendly, tags: [saas]}
+  - {name: Calm, source: greenhouse, id: calm, tags: [consumer, health]}
+  - {name: Carta, source: greenhouse, id: carta, tags: [fintech]}
+  - {name: Celonis, source: greenhouse, id: celonis, tags: [data, saas]}
+  - {name: Chainguard, source: greenhouse, id: chainguard, tags: [security, devtools]}
+  - {name: Checkr, source: greenhouse, id: checkr, tags: [saas]}
+  - {name: Chime, source: greenhouse, id: chime, tags: [fintech]}
+  - {name: CircleCI, source: greenhouse, id: circleci, tags: [devtools]}
+  - {name: Cloudflare, source: greenhouse, id: cloudflare, tags: [infra, security]}
+  - {name: Cockroach Labs, source: greenhouse, id: cockroachlabs, tags: [data, devtools]}
+  - {name: Coinbase, source: greenhouse, id: coinbase, tags: [fintech]}
+  - {name: Contentful, source: greenhouse, id: contentful, tags: [saas]}
+  - {name: CoreWeave, source: greenhouse, id: coreweave, tags: [ai, infra]}
+  - {name: Coursera, source: greenhouse, id: coursera, tags: [edtech]}
+  - {name: Cresta, source: greenhouse, id: cresta, tags: [ai]}
+  - {name: Cribl, source: greenhouse, id: cribl, tags: [data, devtools]}
+  - {name: Databricks, source: greenhouse, id: databricks, tags: [ai, data]}
+  - {name: Datadog, source: greenhouse, id: datadog, tags: [devtools, data]}
+  - {name: Dataiku, source: greenhouse, id: dataiku, tags: [ai, data]}
+  - {name: Descript, source: greenhouse, id: descript, tags: [ai, consumer]}
+  - {name: Dialpad, source: greenhouse, id: dialpad, tags: [ai, saas]}
+  - {name: Discord, source: greenhouse, id: discord, tags: [consumer]}
+  - {name: Doximity, source: greenhouse, id: doximity, tags: [health]}
+  - {name: Dropbox, source: greenhouse, id: dropbox, tags: [saas]}
+  - {name: Duolingo, source: greenhouse, id: duolingo, tags: [consumer, ai]}
+  - {name: Elastic, source: greenhouse, id: elastic, tags: [data, devtools]}
+  - {name: Faire, source: greenhouse, id: faire, tags: [consumer, saas]}
+  - {name: Fastly, source: greenhouse, id: fastly, tags: [infra]}
+  - {name: Figma, source: greenhouse, id: figma, tags: [saas, design]}
+  - {name: Figure, source: greenhouse, id: figureai, tags: [ai, robotics]}
+  - {name: Fivetran, source: greenhouse, id: fivetran, tags: [data]}
+  - {name: Flatiron Health, source: greenhouse, id: flatironhealth, tags: [health]}
+  - {name: Flexport, source: greenhouse, id: flexport, tags: [logistics]}
+  - {name: GitLab, source: greenhouse, id: gitlab, tags: [devtools]}
+  - {name: Glean, source: greenhouse, id: gleanwork, tags: [ai, saas]}
+  - {name: Glossier, source: greenhouse, id: glossier, tags: [consumer]}
+  - {name: Grafana Labs, source: greenhouse, id: grafanalabs, tags: [devtools]}
+  - {name: Gusto, source: greenhouse, id: gusto, tags: [saas, fintech]}
+  - {name: HelloFresh, source: greenhouse, id: hellofresh, tags: [consumer]}
+  - {name: Helsing, source: greenhouse, id: helsing, tags: [ai]}
+  - {name: Hootsuite, source: greenhouse, id: hootsuite, tags: [saas]}
+  - {name: Hume AI, source: greenhouse, id: humeai, tags: [ai]}
+  - {name: Huntress, source: greenhouse, id: huntress, tags: [security]}
+  - {name: Inflection AI, source: greenhouse, id: inflectionai, tags: [ai]}
+  - {name: Instacart, source: greenhouse, id: instacart, tags: [consumer]}
+  - {name: Intercom, source: greenhouse, id: intercom, tags: [ai, saas]}
+  - {name: Isomorphic Labs, source: greenhouse, id: isomorphiclabs, tags: [ai, health]}
+  - {name: JFrog, source: greenhouse, id: jfrog, tags: [devtools]}
+  - {name: Khan Academy, source: greenhouse, id: khanacademy, tags: [edtech]}
+  - {name: Klaviyo, source: greenhouse, id: klaviyo, tags: [saas]}
+  - {name: Komodo Health, source: greenhouse, id: komodohealth, tags: [health, data]}
+  - {name: Labelbox, source: greenhouse, id: labelbox, tags: [ai]}
+  - {name: Later, source: greenhouse, id: later, tags: [saas]}
+  - {name: Lattice, source: greenhouse, id: lattice, tags: [saas]}
+  - {name: LaunchDarkly, source: greenhouse, id: launchdarkly, tags: [devtools]}
+  - {name: Lightmatter, source: greenhouse, id: lightmatter, tags: [ai, hardware]}
+  - {name: Lyft, source: greenhouse, id: lyft, tags: [consumer]}
+  - {name: Mercury, source: greenhouse, id: mercury, tags: [fintech]}
+  - {name: Mixpanel, source: greenhouse, id: mixpanel, tags: [data, saas]}
+  - {name: Modern Health, source: greenhouse, id: modernhealth, tags: [health]}
+  - {name: MongoDB, source: greenhouse, id: mongodb, tags: [data, devtools]}
+  - {name: Monzo, source: greenhouse, id: monzo, tags: [fintech]}
+  - {name: Mozilla, source: greenhouse, id: mozilla, tags: [consumer]}
+  - {name: N26, source: greenhouse, id: n26, tags: [fintech]}
+  - {name: Navan, source: greenhouse, id: tripactions, tags: [saas]}
+  - {name: Netlify, source: greenhouse, id: netlify, tags: [devtools]}
+  - {name: Netskope, source: greenhouse, id: netskope, tags: [security]}
+  - {name: New Relic, source: greenhouse, id: newrelic, tags: [devtools]}
+  - {name: Nextdoor, source: greenhouse, id: nextdoor, tags: [consumer]}
+  - {name: Nuro, source: greenhouse, id: nuro, tags: [ai, robotics]}
+  - {name: "Observe.AI", source: greenhouse, id: observeai, tags: [ai]}
+  - {name: Okta, source: greenhouse, id: okta, tags: [security]}
+  - {name: Oscar Health, source: greenhouse, id: oscar, tags: [health]}
+  - {name: PagerDuty, source: greenhouse, id: pagerduty, tags: [devtools]}
+  - {name: Peloton, source: greenhouse, id: peloton, tags: [consumer]}
+  - {name: Pendo, source: greenhouse, id: pendo, tags: [saas, data]}
+  - {name: Pinterest, source: greenhouse, id: pinterest, tags: [consumer]}
+  - {name: PlanetScale, source: greenhouse, id: planetscale, tags: [devtools, data]}
+  - {name: Reddit, source: greenhouse, id: reddit, tags: [consumer]}
+  - {name: Robinhood, source: greenhouse, id: robinhood, tags: [fintech]}
+  - {name: Roblox, source: greenhouse, id: roblox, tags: [consumer, gaming]}
+  - {name: Rubrik, source: greenhouse, id: rubrik, tags: [security, data]}
+  - {name: SambaNova, source: greenhouse, id: sambanovasystems, tags: [ai, hardware]}
+  - {name: Samsara, source: greenhouse, id: samsara, tags: [saas]}
+  - {name: Scale AI, source: greenhouse, id: scaleai, tags: [ai]}
+  - {name: SentinelOne, source: greenhouse, id: sentinellabs, tags: [security]}
+  - {name: Sigma Computing, source: greenhouse, id: sigmacomputing, tags: [data]}
+  - {name: Smartsheet, source: greenhouse, id: smartsheet, tags: [saas]}
+  - {name: SoFi, source: greenhouse, id: sofi, tags: [fintech]}
+  - {name: SpaceX, source: greenhouse, id: spacex, tags: [hardware]}
+  - {name: Speechmatics, source: greenhouse, id: speechmatics, tags: [ai]}
+  - {name: Sprout Social, source: greenhouse, id: sproutsocial, tags: [saas]}
+  - {name: Squarespace, source: greenhouse, id: squarespace, tags: [saas]}
+  - {name: Stability AI, source: greenhouse, id: stabilityai, tags: [ai]}
+  - {name: Stitch Fix, source: greenhouse, id: stitchfix, tags: [consumer]}
+  - {name: Stripe, source: greenhouse, id: stripe, tags: [fintech]}
+  - {name: SumUp, source: greenhouse, id: sumup, tags: [fintech]}
+  - {name: Sweetgreen, source: greenhouse, id: sweetgreen, tags: [consumer]}
+  - {name: Tanium, source: greenhouse, id: tanium, tags: [security]}
+  - {name: Toast, source: greenhouse, id: toast, tags: [fintech, saas]}
+  - {name: Together AI, source: greenhouse, id: togetherai, tags: [ai, infra]}
+  - {name: Tripadvisor, source: greenhouse, id: tripadvisor, tags: [consumer]}
+  - {name: Twilio, source: greenhouse, id: twilio, tags: [saas]}
+  - {name: Twitch, source: greenhouse, id: twitch, tags: [consumer]}
+  - {name: Typeface, source: greenhouse, id: typeface, tags: [ai]}
+  - {name: Udemy, source: greenhouse, id: udemy, tags: [edtech]}
+  - {name: Vercel, source: greenhouse, id: vercel, tags: [devtools]}
+  - {name: Verkada, source: greenhouse, id: verkada, tags: [security, hardware]}
+  - {name: Waymo, source: greenhouse, id: waymo, tags: [ai, robotics]}
+  - {name: Wise, source: greenhouse, id: wise, tags: [fintech]}
+  - {name: Wiz, source: greenhouse, id: wizinc, tags: [security]}
+  - {name: xAI, source: greenhouse, id: xai, tags: [ai]}
+  - {name: Yext, source: greenhouse, id: yext, tags: [saas]}
+  - {name: Zocdoc, source: greenhouse, id: zocdoc, tags: [health]}
+  - {name: ZoomInfo, source: greenhouse, id: zoominfo, tags: [saas]}
+  - {name: Zscaler, source: greenhouse, id: zscaler, tags: [security]}
+  - {name: Binance, source: lever, id: binance, tags: [fintech]}
+  - {name: Brilliant, source: lever, id: brilliant, tags: [edtech]}
+  - {name: Coalfire, source: lever, id: coalfire, tags: [security]}
+  - {name: Contentsquare, source: lever, id: contentsquare, tags: [saas, data]}
+  - {name: "Crypto.com", source: lever, id: crypto, tags: [fintech]}
+  - {name: DEUNA, source: lever, id: deuna, tags: [fintech]}
+  - {name: JumpCloud, source: lever, id: jumpcloud, tags: [security]}
+  - {name: Outreach, source: lever, id: outreach, tags: [saas]}
+  - {name: Palantir, source: lever, id: palantir, tags: [ai, data]}
+  - {name: Pigment, source: lever, id: pigment, tags: [saas]}
+  - {name: Ro, source: lever, id: ro, tags: [health]}
+  - {name: Spotify, source: lever, id: spotify, tags: [consumer]}
+  - {name: Tinybird, source: lever, id: tinybird, tags: [data]}
+  - {name: Veeva, source: lever, id: veeva, tags: [health, saas]}
+  - {name: Yuno, source: lever, id: yuno, tags: [fintech]}
+  - {name: Zoox, source: lever, id: zoox, tags: [ai, robotics]}
+  - {name: bunq, source: recruitee, id: bunq, tags: [fintech]}
+  - {name: Channable, source: recruitee, id: channable, tags: [saas]}
+  - {name: AbbVie, source: smartrecruiters, id: AbbVie, tags: [health]}
+  - {name: Canva, source: smartrecruiters, id: Canva, tags: [saas]}
+  - {name: Experian, source: smartrecruiters, id: Experian, tags: [data, fintech]}
+  - {name: NielsenIQ, source: smartrecruiters, id: NielsenIQ, tags: [data]}
+  - {name: ServiceNow, source: smartrecruiters, id: ServiceNow, tags: [saas, ai]}
+  - {name: Ubisoft, source: smartrecruiters, id: Ubisoft2, tags: [gaming]}
+  - {name: Western Digital, source: smartrecruiters, id: WesternDigital, tags: [hardware]}
+  - {name: Wix, source: smartrecruiters, id: Wix2, tags: [saas]}
+  - {name: Hugging Face, source: workable, id: huggingface, tags: [ai]}
+  - {name: Platzi, source: workable, id: platzi, tags: [edtech]}
+  - {name: Semios, source: workable, id: semios, tags: [agtech]}

@@ -1,2 +1,3 @@
 reportlab>=4.0
 pyyaml>=6.0
+pypdf>=4.0   # optional: screening-pass text extraction when poppler is not installed
