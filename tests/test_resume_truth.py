@@ -144,5 +144,20 @@ class Proposals(unittest.TestCase):
         self.assertEqual(yaml.safe_load(out)["rejected_proposals"][0]["text"], "t")
 
 
+    def test_inline_list_is_refused_not_overwritten(self):
+        with open(self.master) as f:
+            src = f.read()
+        start, end = src.index("confirmed_additions:"), src.index("\n# Proposals the candidate")
+        with open(self.master, "w") as f:
+            f.write(src[:start] + "confirmed_additions: [{id: old_fact, fact: kept}]\n" + src[end:])
+        d = self.doc()
+        d["proposals"][0]["decision"] = "approved"
+        self.save(d)
+        errs = pr.apply(self.master, self.props, "app1")[0]
+        self.assertTrue(errs and "nothing was written" in errs[0])
+        with open(self.master) as f:
+            self.assertEqual([a["id"] for a in yaml.safe_load(f)["confirmed_additions"]], ["old_fact"])
+
+
 if __name__ == "__main__":
     unittest.main()

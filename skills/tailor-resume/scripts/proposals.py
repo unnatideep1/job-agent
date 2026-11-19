@@ -186,11 +186,22 @@ def apply(master_path, props_path, app, today=None):
         return [], adds, rejs
     with open(master_path, encoding="utf-8") as f:
         src = f.read()
+    before = yaml.safe_load(src) or {}
+    for key in ("confirmed_additions", "rejected_proposals"):
+        if not isinstance(before.get(key) or [], list):
+            return [f"{key} in the master file is not a list; fix it by hand first. Nothing was written"], [], []
     new = insert_list_items(insert_list_items(src, "confirmed_additions", adds), "rejected_proposals", rejs)
-    check_doc = yaml.safe_load(new)
-    got = {a.get("id") for a in check_doc.get("confirmed_additions") or []}
-    if not all(a["id"] in got for a in adds) or len(check_doc.get("rejected_proposals") or []) < len(rejs):
-        return ["could not insert into the master file cleanly; nothing was written"], [], []
+    # The edited file must parse to exactly the old content plus the new items, so nothing is lost or duplicated.
+    expected = dict(before)
+    expected["confirmed_additions"] = list(before.get("confirmed_additions") or []) + adds
+    if rejs or "rejected_proposals" in before:
+        expected["rejected_proposals"] = list(before.get("rejected_proposals") or []) + rejs
+    try:
+        ok = yaml.safe_load(new) == expected
+    except yaml.YAMLError:
+        ok = False
+    if not ok:
+        return ["could not insert into the master file cleanly (is a list written inline?); nothing was written"], [], []
     shutil.copyfile(master_path, master_path + ".bak")
     with open(master_path, "w", encoding="utf-8") as f:
         f.write(new)

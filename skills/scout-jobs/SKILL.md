@@ -48,7 +48,8 @@ python "SCRIPTS/posting_check.py" <url> --prefs DATA/job_preferences.yaml \
 
 One folder per role under `DATA/scout/roles/`; the fit score reads `posting_check.json` from the same folder.
 
-- **Live:** `live` / `closed` / `uncertain`. Drop closed roles. Confirm `uncertain` ones in the browser.
+- **Live:** `active` / `closed` / `uncertain`. Drop closed roles. Confirm `uncertain` ones in the browser. It only
+  fetches https pages on public hosts and refuses aggregator links (LinkedIn, Indeed...): check the company's own posting.
 - **Work authorization:** quotes any "no sponsorship", "US citizens only" or clearance line and compares it with
   `work_authorization` in the preferences. A conflict is a **blocker**.
 - **Years:** the stated minimum years, for the fit score.
@@ -71,7 +72,7 @@ python "SCRIPTS/fit_score.py" DATA/scout/roles/*/fit.yaml --master DATA/master_r
   --prefs DATA/job_preferences.yaml --table DATA/scout/<date>-scores.md
 ```
 
-It writes `fit.json` beside each `fit.yaml` (the tracker dashboard shows the score) and a ranked table.
+It writes `fit.json` beside each `fit.yaml` and a ranked table.
 
 - **4.0+ Apply, 3.0-3.9 Consider, below 3.0 Skip.** Any blocker forces Skip. Missing musts and a years shortfall cost points.
 - The script refuses evidence ids that aren't in the master file, so the score can't rest on invented proof.
@@ -82,4 +83,5 @@ It writes `fit.json` beside each `fit.yaml` (the tracker dashboard shows the sco
 
 Write `DATA/scout/<date>-shortlist.md`: a ranked table (role with link, company, location, posted/age, flags, fit score,
 recommendation, one-line why, main gap, blockers), at most `volume.shortlist_size` rows, Apply first. List skipped roles
-briefly with the reason. Return it to the orchestrator for Checkpoint 1. When she picks a role, copy its folder's files into the new application folder.
+briefly with the reason. Return it to the orchestrator for Checkpoint 1. When she picks a role, the orchestrator copies that role folder into the new application folder, where the Writer,
+Tod and the tracker dashboard read `fit.yaml`, `fit.json`, `posting_check.json` and `jd.md`.

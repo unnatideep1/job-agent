@@ -24,6 +24,21 @@ class WorkAuth(unittest.TestCase):
         self.assertEqual(pc.work_auth("We build tools for teams.")["verdict"], "not stated")
 
 
+
+class PageSafety(unittest.TestCase):
+    def test_refuses_aggregators_http_and_private_hosts(self):
+        for url, why in (("https://www.linkedin.com/jobs/view/123", "aggregator"),
+                         ("http://example.com/job", "https"),
+                         ("https://127.0.0.1/job", "IP"),
+                         ("https://localhost/job", "public")):
+            self.assertIn(why, pc.page_url_problem(url), url)
+            self.assertEqual(pc.from_page(url)["status"], "uncertain")
+
+    def test_eu_greenhouse_uses_eu_api(self):
+        with mock.patch.object(pc, "_get", return_value=(None, 404)) as get:
+            pc.from_api("https://job-boards.eu.greenhouse.io/acme/jobs/123")
+        self.assertIn("boards-api.eu.greenhouse.io", get.call_args[0][0])
+
 class Posting(unittest.TestCase):
     def test_years(self):
         ys = pc.years_required("You have 8+ years of product management experience. Founded 12 years ago.")

@@ -30,7 +30,7 @@ python "PLUGIN/skills/job-hunt/scripts/tracker.py" upsert --data DATA --url <url
 
 1. **Scout** (agent `scout`) → shortlist in `DATA/scout/` with a 1–5 fit score and Apply / Consider / Skip for each role, plus liveness, repost and work-authorization flags.
    Add each shortlisted role to the tracker (`status=shortlisted`, `fit_score`, `date_added`).
-   **Checkpoint 1:** the user picks roles (respect `volume.max_tailored_per_week`). Recommend Apply roles first; say why for anything below 4.0. If she picks a Skip or Consider role, respect it and record her reason as `override` in its `fit.yaml`. Set picked roles to `status=tailoring` with `app_folder`, and the rest to `skipped` if she declines them.
+   **Checkpoint 1:** the user picks roles (respect `volume.max_tailored_per_week`). Recommend Apply roles first; say why for anything below 4.0. If she picks a Skip or Consider role, respect it and record her reason as `override` in its `fit.yaml` and re-run `fit_score.py` on it. For each picked role, create `DATA/applications/<yyyy-mm>-<company>-<role>/`, copy everything from its `DATA/scout/roles/<company>-<role>/` folder into it (`fit.yaml`, `fit.json`, `posting_check.json`, `jd.md`), and set `status=tailoring` with `app_folder=<that folder name>`. Set the rest to `skipped` if she declines them.
 2. **Writer, pass 1** (agent `writer`) → `jd.md`, requirement and keyword map (resolved by intent where her experience supports it), reframed `tailoring.yaml`, PDF, screening report, `gap_report.md`, and `proposals.yaml` for what is still uncovered.
 3. **Proposals** (only if `proposals.yaml` has any). Show them to her:
    ```

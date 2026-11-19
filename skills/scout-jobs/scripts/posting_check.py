@@ -17,9 +17,11 @@ Requires: pyyaml
 """
 import argparse
 import html
+import ipaddress
 import json
 import os
 import re
+import socket
 import sys
 import urllib.error
 import urllib.parse
@@ -157,11 +159,12 @@ def from_api(url):
     def ok_ids(*ids):
         return all(SLUG_RE.match(i or "") for i in ids)
 
-    if host.endswith("greenhouse.io") and (len(parts) >= 3 and parts[1] == "jobs" or "gh_jid" in q):
+    if (host == "greenhouse.io" or host.endswith(".greenhouse.io")) and (len(parts) >= 3 and parts[1] == "jobs" or "gh_jid" in q):
         slug, jid = (parts[0], parts[2]) if len(parts) >= 3 else ((q.get("for") or [""])[0], q["gh_jid"][0])
         if not (ok_ids(slug, jid) and jid.isdigit()):
             return None
-        d, err = _get(f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs/{jid}?content=true")
+        api = "boards-api.eu.greenhouse.io" if host.endswith(".eu.greenhouse.io") else "boards-api.greenhouse.io"
+        d, err = _get(f"https://{api}/v1/boards/{slug}/jobs/{jid}?content=true")
         if err:
             return dict(status="closed" if err in (404, 410) else "uncertain", reason=f"greenhouse api: {err}", source="greenhouse")
         deadline = d.get("application_deadline")
@@ -222,10 +225,50 @@ def from_api(url):
     return None
 
 
+AGGREGATORS = ("linkedin.com", "indeed.com", "wellfound.com", "glassdoor.com", "ziprecruiter.com")
+
+
+def page_url_problem(url):
+    """Why a non-ATS page must not be fetched by this script, or "" if it may be."""
+    u = urllib.parse.urlparse(url)
+    host = (u.hostname or "").lower()
+    if u.scheme != "https":
+        return "only https pages are fetched"
+    if any(host == a or host.endswith("." + a) for a in AGGREGATORS):
+        return "job aggregator link: find the role on the company's own board and check that URL instead"
+    if not host or host == "localhost" or host.endswith((".local", ".internal", ".localhost")):
+        return "not a public host"
+    try:
+        ipaddress.ip_address(host)
+        return "IP-address links are not fetched"
+    except ValueError:
+        pass
+    try:
+        addrs = {ai[4][0] for ai in socket.getaddrinfo(host, 443)}
+    except OSError:
+        return ""  # DNS failure: urlopen reports it as uncertain
+    for a in addrs:
+        ip = ipaddress.ip_address(a.split("%")[0])
+        if not ip.is_global:
+            return "host resolves to a private address"
+    return ""
+
+
+class _SafeRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        problem = page_url_problem(newurl)
+        if problem:
+            raise urllib.error.URLError(f"redirect blocked ({problem})")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 def from_page(url):
+    problem = page_url_problem(url)
+    if problem:
+        return dict(status="uncertain", reason=f"not fetched: {problem}", source="page")
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
+        with urllib.request.build_opener(_SafeRedirect).open(req, timeout=20) as r:
             body = r.read(MAX_HTML).decode("utf-8", "replace")
             final = r.geturl()
     except urllib.error.HTTPError as e:
@@ -249,8 +292,8 @@ def from_page(url):
 
 def check(url=None, text=None, prefs=None):
     if url:
-        if urllib.parse.urlparse(url).scheme not in ("https", "http"):
-            raise SystemExit("only http(s) URLs")
+        if urllib.parse.urlparse(url).scheme != "https":
+            raise SystemExit("only https URLs")
         res = from_api(url) or from_page(url)
         res["url"] = url
     else:
