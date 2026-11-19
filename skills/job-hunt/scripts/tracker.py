@@ -10,8 +10,8 @@ upsert     Finds the row for URL (or adds one) and sets the given columns. Old C
 dashboard  Writes one self-contained HTML file (no server, no network): pipeline cards, a funnel, applications
            per week, follow-ups that are due, and a sortable, filterable table. Rows with an app_folder pick up
            fit (fit.json) and screening results (ats_report.json) from DATA/applications/<app_folder>/.
-Status values: shortlisted, tailoring, ready, paused, applied, screening, interview, rejected, closed, skipped, withdrawn.
-           paused = the application form was started but left in draft (not submitted); it counts as in pipeline.
+Status values: shortlisted, tailoring, ready, draft, applied, screening, interview, rejected, closed, skipped, withdrawn.
+           draft = the application form was started but left in draft (not submitted); it counts as in pipeline.
 Tracker layout inspired by career-ops (MIT, github.com/career-ops-hq/career-ops).
 """
 import argparse
@@ -25,9 +25,9 @@ from datetime import date, timedelta
 
 COLUMNS = ["date_applied", "company", "role", "location", "url", "first_published", "fit_score", "resume_file",
            "status", "referral_or_outreach", "next_step", "next_step_date", "notes", "date_added", "app_folder"]
-STATUSES = ["shortlisted", "tailoring", "ready", "paused", "applied", "screening", "interview",
+STATUSES = ["shortlisted", "tailoring", "ready", "draft", "applied", "screening", "interview",
             "rejected", "closed", "skipped", "withdrawn"]
-ACTIVE = {"shortlisted", "tailoring", "ready", "paused", "applied", "screening", "interview"}
+ACTIVE = {"shortlisted", "tailoring", "ready", "draft", "applied", "screening", "interview"}
 SENT = {"applied", "screening", "interview", "rejected"}  # reached the employer
 CALLED = {"screening", "interview"}                       # recruiter screen or interview = an interview call
 
@@ -132,7 +132,7 @@ def stats(rows, today=None):
             weeks[wk] += 1
     return {
         "in_pipeline": sum(r["status"] in ACTIVE - SENT for r in rows),
-        "paused": sum(r["status"] == "paused" for r in rows),
+        "draft": sum(r["status"] == "draft" for r in rows),
         "applied": len(sent),
         "calls": len(called),
         "call_rate": round(100 * len(called) / len(sent)) if sent else None,
@@ -169,7 +169,7 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}a{color:var(--blue);te
 .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:#eef1f8;color:var(--navy)}
 .s-applied{background:#e3efff;color:#1d5fb8}.s-screening,.s-interview{background:#dff5e6;color:#1d7a43}
 .s-rejected,.s-closed,.s-withdrawn{background:#f6e3e3;color:#a33}.s-skipped{background:#eee;color:#777}
-.s-ready{background:#fff3d6;color:#8a6100}.s-paused{background:#ffe8d6;color:#a64b00}.s-tailoring,.s-shortlisted{background:#efe8ff;color:#5b3fb5}
+.s-ready{background:#fff3d6;color:#8a6100}.s-draft{background:#ffe8d6;color:#a64b00}.s-tailoring,.s-shortlisted{background:#efe8ff;color:#5b3fb5}
 .nw{white-space:nowrap}.due{color:#8a6100;font-weight:600}.overdue{color:#a33;font-weight:600}.mute{color:var(--mute)}
 </style></head><body>
 <header><h1>Job search tracker</h1><p id="sub"></p></header>
@@ -188,7 +188,7 @@ const D=JSON.parse(document.getElementById('data').textContent),S=D.stats,$=id=>
 const el=(t,a={},...k)=>{const e=document.createElement(t);for(const[x,v]of Object.entries(a))x==='text'?e.textContent=v:e.setAttribute(x,v);k.forEach(c=>e.append(c));return e};
 $('sub').textContent='Generated '+D.generated+' from applications.csv · '+D.rows.length+' postings';
 const dash=(v,s='')=>v==null?'–':v+s;
-[['In pipeline',S.in_pipeline],['Paused drafts',S.paused],['Applied',S.applied],['Interview calls',S.calls],['Call rate',dash(S.call_rate,'%')],
+[['In pipeline',S.in_pipeline],['Drafts',S.draft],['Applied',S.applied],['Interview calls',S.calls],['Call rate',dash(S.call_rate,'%')],
  ['Avg fit',dash(S.avg_fit,' / 5')],['Avg keyword coverage',dash(S.avg_coverage,'%')],['Follow-ups due',S.followups]]
  .forEach(([l,v])=>$('cards').append(el('div',{class:'card'},el('b',{text:String(v)}),el('span',{text:l}))));
 const bars=(id,obj)=>{const m=Math.max(1,...Object.values(obj));for(const[k,v]of Object.entries(obj)){const d=el('div');d.style.width=(v/m*70)+'%';
