@@ -17,7 +17,7 @@ What it adds to a plain resume tailor:
 - **Fit scoring:** a 1–5 score with Apply / Consider / Skip, based on the posting's must-haves. Closed postings, reposts and sponsorship or citizenship requirements are flagged before you spend time on a role.
 - **Gaps filled with your experience:** requirements are first matched by intent to what you've done. For what's still missing, the Writer drafts bullets and you approve, edit or reject them. Approvals are saved to your master file and reused for every later application.
 - **A screening pass:** the PDF's text layer is checked the way an applicant tracking system reads it, with a keyword-coverage report for the posting. Keywords are only added where your experience backs them.
-- **A tracker dashboard:** one local HTML file showing your pipeline, interview-call rate and follow-ups due.
+- **A tracker dashboard:** one local HTML file showing your pipeline, paused drafts vs applied, interview-call rate and follow-ups due.
 
 ## How it works
 
@@ -137,7 +137,7 @@ The Scout lists the posting's requirements in `fit.yaml`, each with a weight (mu
 
 `tracker.py upsert` updates one row per posting (keyed on the URL, with a backup). `tracker.py dashboard` writes
 `dashboard.html`: one self-contained file with no server or network access. It shows pipeline cards, a funnel,
-applications per week, your interview-call rate, follow-ups due or overdue, and a sortable, filterable table with
+applications per week, your interview-call rate, paused drafts (applications you started but haven't submitted), follow-ups due or overdue, and a sortable, filterable table with
 each role's fit score and screening results.
 
 ## What the resume builder enforces

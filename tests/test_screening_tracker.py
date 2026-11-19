@@ -127,6 +127,17 @@ class Tracker(unittest.TestCase):
         self.assertEqual((s["applied"], s["calls"], s["call_rate"]), (2, 1, 50))
         self.assertEqual(s["followups"], 3)  # Demo Corp overdue; Example Target and Sample Labs due within 2 days
 
+    def test_paused_draft_is_in_pipeline_not_applied(self):
+        path = os.path.join(self.dir, "applications.csv")
+        before = tracker.stats(tracker.collect(self.dir, today=date(2026, 11, 22)), today=date(2026, 11, 22))
+        tracker.upsert(path, "https://example.com/jobs/123", {"status": "paused", "next_step": "Finish and submit",
+                                                               "next_step_date": "2026-11-21"})
+        rows = tracker.collect(self.dir, today=date(2026, 11, 22))
+        s = tracker.stats(rows, today=date(2026, 11, 22))
+        self.assertEqual((s["paused"], s["applied"], s["in_pipeline"]), (1, before["applied"], before["in_pipeline"]))
+        self.assertEqual(next(r for r in rows if r["status"] == "paused")["followup"], "overdue")
+        self.assertIn("Paused drafts", tracker.render(rows, today=date(2026, 11, 22)))
+
 
 if __name__ == "__main__":
     unittest.main()

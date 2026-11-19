@@ -47,11 +47,12 @@ python "PLUGIN/skills/job-hunt/scripts/tracker.py" upsert --data DATA --url <url
 6. **Applier** (agent `applier`) → fills the form, asks the user to attach the PDF, stops before Submit, writes `form_snapshot.txt`.
 7. **Tod** reviews the form snapshot against the master file and the attached resume. Save his report as `form_review_<n>.md`.
    **Checkpoint 3:** the user says yes in chat → the Applier submits, confirms the confirmation page, and sets `status=applied` in the tracker.
+   If she stops before submitting (leaves the form in draft to finish later), set `status=paused` with `next_step="Finish and submit"` and a `next_step_date`, so the dashboard reminds her. When she comes back, resume from `form_snapshot.txt` (Tod re-checks any changed fields) and continue to Checkpoint 3.
 8. **Dashboard.** After any tracker change, or when she asks how things are going:
    ```
    python "PLUGIN/skills/job-hunt/scripts/tracker.py" dashboard --data DATA --open
    ```
-   It writes `DATA/dashboard.html` (one local file, no server): pipeline, funnel, applications per week, interview-call rate, follow-ups due, fit and screening results per role. When she reports news (a recruiter screen, a rejection, a closed posting), upsert the status (`screening`, `interview`, `rejected`, `closed`, `withdrawn`).
+   It writes `DATA/dashboard.html` (one local file, no server): pipeline, funnel, applications per week, interview-call rate, follow-ups due, fit and screening results per role. When she reports news (a recruiter screen, a rejection, a closed posting), upsert the status (`paused`, `applied`, `screening`, `interview`, `rejected`, `closed`, `withdrawn`). If she tells you she submitted a paused draft herself, set `status=applied` and `date_applied`.
 9. For strong-fit roles, suggest she asks for a referral or contacts the hiring team herself.
 
 ## Rules

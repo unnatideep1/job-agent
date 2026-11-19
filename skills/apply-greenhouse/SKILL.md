@@ -44,4 +44,10 @@ Only after the candidate says yes in chat:
      --set next_step="Follow up if no reply" --set next_step_date=<date + 7 days>
    ```
 
+If the candidate wants to pause before submitting, don't submit. Keep `APP/form_snapshot.txt` current and set:
+```
+python "${CLAUDE_PLUGIN_ROOT}/skills/job-hunt/scripts/tracker.py" upsert --data DATA --url <posting url> \
+  --set status=paused --set next_step="Finish and submit" --set next_step_date=<yyyy-mm-dd>
+```
+
 Other ATSs (Lever, Ashby, Workday) need their own skill. Follow the same structure.
