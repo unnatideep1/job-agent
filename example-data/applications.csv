@@ -1,1 +1,5 @@
-date_applied,company,role,location,url,first_published,fit_score,resume_file,status,referral_or_outreach,next_step,next_step_date,notes
+date_applied,company,role,location,url,first_published,fit_score,resume_file,status,referral_or_outreach,next_step,next_step_date,notes,date_added,app_folder
+,Example Target,"Group Product Manager, AI",Remote (US),https://example.com/jobs/123,2026-11-10,,,ready,,Candidate approves the PDF,2026-11-21,Fictional example row,2026-11-18,example-gpm-ai
+2026-11-03,Sample Labs,"Principal Product Manager, Agents","Austin, TX (hybrid)",https://example.com/jobs/456,2026-10-30,4.3,Alex_Rivera_Resume_SampleLabs.pdf,screening,,Recruiter call,2026-11-24,Fictional example row,2026-11-01,
+2026-10-28,Demo Corp,"Director of Product, AI Platform",Remote (US),https://example.com/jobs/789,2026-10-20,4.0,Alex_Rivera_Resume_DemoCorp.pdf,applied,,Follow up with recruiter,2026-11-11,Fictional example row,2026-10-25,
+,Placeholder Inc,"Group Product Manager, Payments",New York (onsite),https://example.com/jobs/999,2026-09-01,2.6,,skipped,,,,"Fictional: onsite NYC, no relocation",2026-11-02,

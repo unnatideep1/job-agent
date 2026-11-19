@@ -62,9 +62,22 @@ strengths_library:
   - Usage-based pricing
   - B2B SaaS growth
 
-# Facts the candidate confirmed during gap analysis. Additions in tailoring files must cite these ids.
+# Facts the candidate confirmed. Additions in tailoring files must cite these ids, and every later application can
+# reuse them. Most arrive through gap proposals (proposals.py apply): the Writer drafts, the candidate approves.
 confirmed_additions:
   - id: ab_tests
     fact: Ran weekly A/B tests on assistant prompts and onboarding flows at Example Corp.
+    status: candidate-confirmed     # only candidate-approved facts can go on a resume
     confirmed: 2026-11-01
-    question: "The JD asks for experimentation. Have you run A/B tests? On what?"
+    source_app: example-gpm-ai      # the application that surfaced it
+    covers: experimentation         # the JD requirement it answered
+    role: ex_senior
+    origin: grounded                # grounded (extends master bullets) or new-claim (nothing backed it before)
+    inspired_by: [ex_eval]
+
+# Proposals the candidate turned down. The Writer never proposes the same idea again for the same requirement.
+rejected_proposals:
+  - requirement: people management
+    text: Managed a team of product managers on the AI assistant.
+    date: 2026-11-01
+    app: example-gpm-ai

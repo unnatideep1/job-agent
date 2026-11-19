@@ -1,10 +1,10 @@
 {
   "name": "job-agent",
-  "version": "0.1.0",
-  "description": "Scout high-fit roles, tailor your resume truthfully to each posting, get an independent review, and apply with your approval at every step.",
+  "version": "0.2.0",
+  "description": "Scout and fit-score roles from 260+ company boards, tailor a screening-friendly resume truthfully to each posting, approve gap-filling bullets, get an independent review, apply with your approval at every step, and track it all in a local dashboard.",
   "author": {
     "name": "Unnati Deep"
   },
   "license": "MIT",
-  "keywords": ["job search", "resume", "tailoring", "applications", "agents"]
+  "keywords": ["job search", "resume", "tailoring", "applications", "agents", "ats", "fit scoring", "tracker"]
 }

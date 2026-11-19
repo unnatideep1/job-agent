@@ -1,0 +1,20 @@
+# Example gap proposals for one application, written by the Writer after intent mapping.
+# Only requirements still uncovered get a proposal. The candidate answers approve / edit / reject per item;
+# proposals.py apply then saves approved ones to master_resume.yaml confirmed_additions (reused for every
+# later application) and rejected ones to rejected_proposals (never proposed again for that requirement).
+# Nothing here reaches a PDF: tailoring.yaml additions may only cite confirmed_additions ids.
+proposals:
+  - id: assistant_tool_calling
+    requirement: agent platforms
+    kind: grounded                 # extends what the master file already says
+    role: ex_senior
+    inspired_by: [ex_scope, ex_eval]
+    text: "Defined how the AI assistant calls customer tools and APIs, and gated each new tool behind the evaluation suite."
+    decision: pending
+  - id: agent_partner_pilot
+    requirement: agent platforms
+    kind: new-claim                # UNVERIFIED: nothing in the master file says this; only Alex knows if it's true
+    role: ex_senior
+    inspired_by: [ex_scope]
+    text: "Piloted multi-step agent workflows with design-partner customers and turned the findings into the assistant roadmap."
+    decision: pending
