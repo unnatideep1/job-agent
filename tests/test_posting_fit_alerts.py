@@ -78,6 +78,13 @@ class Posting(unittest.TestCase):
         self.assertEqual([y["years"] for y in pc.years_required(r["text"])], [8])
         self.assertIsNone(pc.job_posting_ld("<html><script type='application/ld+json'>{bad json</script></html>"))
 
+    def test_job_posting_ld_structured_address(self):
+        # Microsoft's careers site nests addressCountry as an object and can list several addresses.
+        places = [{"@type": "Place", "address": [
+            {"addressLocality": "Hyderabad", "addressCountry": {"@type": "Country", "name": "India"}},
+            {"addressLocality": ["Bangalore"], "addressCountry": "IN"}]}]
+        self.assertEqual(pc._ld_places(places), "Hyderabad, India; Bangalore, IN")
+
 
 class Fit(unittest.TestCase):
     def fit(self, **kw):

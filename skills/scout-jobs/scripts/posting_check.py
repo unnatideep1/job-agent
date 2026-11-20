@@ -275,12 +275,23 @@ def _ld_text(v):
     return "\n".join(f"- {x.strip()}" if "\xa0" in s else x.strip() for x in re.split(r"\xa0+|\n", s) if x.strip())
 
 
+def _ld_name(v):
+    # schema.org values may be plain strings, {"@type": "Country", "name": ...} objects, or lists of either.
+    if isinstance(v, dict):
+        return _ld_name(v.get("name"))
+    if isinstance(v, list):
+        return ", ".join(x for x in (_ld_name(i) for i in v) if x)
+    return str(v).strip() if v else ""
+
+
 def _ld_places(v):
     out = []
     for p in v if isinstance(v, list) else [v]:
         if isinstance(p, dict):
-            a = p.get("address") if isinstance(p.get("address"), dict) else {}
-            out.append(p.get("name") or ", ".join(x for x in (a.get("addressLocality"), a.get("addressCountry")) if x))
+            addrs = p.get("address")
+            out += [_ld_name(p.get("name"))] if p.get("name") else [
+                ", ".join(x for x in (_ld_name(a.get("addressLocality")), _ld_name(a.get("addressCountry"))) if x)
+                for a in (addrs if isinstance(addrs, list) else [addrs]) if isinstance(a, dict)]
     return "; ".join(x for x in out if x)
 
 
