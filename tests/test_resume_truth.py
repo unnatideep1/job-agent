@@ -159,5 +159,21 @@ class Proposals(unittest.TestCase):
             self.assertEqual([a["id"] for a in yaml.safe_load(f)["confirmed_additions"]], ["old_fact"])
 
 
+@unittest.skipUnless(shutil.which("pdftotext"), "poppler not installed")
+class ReadingOrder(unittest.TestCase):
+    def order(self, inline):
+        m, t = master(), tailoring()
+        ttf = br.register_fonts(None)
+        with tempfile.TemporaryDirectory() as d:
+            pdf = os.path.join(d, "r.pdf")
+            return br.reading_order_problems(pdf, m, br.build(m, t, pdf, br.make_styles(ttf), ttf, inline))
+
+    def test_dates_must_sit_between_title_and_first_bullet(self):
+        # Short right-aligned rows split into a separate column in raw extraction; the check must
+        # catch that so main() falls back to inline dates.
+        self.assertTrue(any("between its title" in p for p in self.order(False)))
+        self.assertEqual(self.order(True), [])
+
+
 if __name__ == "__main__":
     unittest.main()
