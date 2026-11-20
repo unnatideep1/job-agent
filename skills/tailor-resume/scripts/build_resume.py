@@ -107,7 +107,9 @@ class Row(Flowable):
         self.lp.drawOn(self.canv, 0, 0)
         c = self.canv
         c.saveState(); c.setFont(self.rs.fontName, self.rs.fontSize); c.setFillColor(self.rs.textColor)
-        c.drawRightString(self.aw, self.h - self.lp.style.leading + 2.6, " " + self.right)
+        # Same baseline as the paragraph's first line (ReportLab: height - fontSize). A higher baseline
+        # makes raw-mode text extraction read the dates before the title.
+        c.drawRightString(self.aw, self.h - self.lp.style.fontSize, " " + self.right)
         c.restoreState()
 
 
@@ -472,17 +474,17 @@ def build(master, t, out_pdf, S, ttf, inline_dates):
         if ci:
             st.append(Spacer(1, 6))
         block_start = len(st)  # company header .. first bullet are kept on one page
-        st.append(row(name, span(co["start"], co["end"]), S["co"], S["right"]))
+        multi = len(co["roles"]) > 1
+        # Single-role companies carry their dates on the title row, so parsers read company, title, dates.
+        st.append(row(name, span(co["start"], co["end"]), S["co"], S["right"]) if multi
+                  else Paragraph(name, S["co"]))
         if co.get("description"):
             st.append(Paragraph(txt(co["description"]), S["desc"]))
-        multi = len(co["roles"]) > 1
         for ri, role in enumerate(co["roles"]):
-            if multi:
-                if ri:
-                    st.append(Spacer(1, 4))
-                st.append(row(esc(role["title"]), span(role["start"], role["end"]), S["role"], S["righti"]))
-            else:
-                st.append(Paragraph(esc(role["title"]), S["role"]))
+            if ri:
+                st.append(Spacer(1, 4))
+            dates = span(role["start"], role["end"]) if multi else span(co["start"], co["end"])
+            st.append(row(esc(role["title"]), dates, S["role"], S["righti"]))
             if role.get("description"):
                 st.append(Paragraph(txt(role["description"]), S["desc"]))
             wanted_secs = order.get(role["id"], [])
@@ -548,11 +550,11 @@ def reading_order_problems(pdf, master, rendered_first):
             first = rendered_first.get(role["id"], "")[:40]
             bi = flat.find(first, max(ti, cursor)) if first else -1
             dates = span(role["start"], role["end"]) if multi else span(co["start"], co["end"])
-            di = flat.find(dates, cursor)
             if min(ti, bi) < 0:
                 problems.append(f"{role['title']}: title or first bullet not found"); continue
-            if not (di >= 0 and di < bi):
-                problems.append(f"{role['title']}: dates read after its first bullet")
+            di = flat.find(dates, ti)
+            if not (0 <= di < bi):
+                problems.append(f"{role['title']}: dates do not read between its title and first bullet")
             cursor = bi
     return problems
 
